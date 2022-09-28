@@ -1,23 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from './components/Login';
+import MyPosts from './components/MyPosts';
+import CreatePost from './components/CreatePost';
+import Post from './components/Post';
+import EditPost from './components/EditPost';
+import DeletePost from './components/DeletePost';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App">      
+    <Router>
+      <Routes>    
+            <Route path= "/" element = {<MyPosts/>} exact />               
+            <Route path= "/post/create" element = {<CreatePost />} exact />
+            <Route path= "/post/:id" element = {<Post />} exact />            
+            <Route path= "/post/:id/edit" element = {<EditPost />} exact />
+            <Route path= "/post/:id/delete" element = {<DeletePost />} exact />
+
+            <Route path= "/login" element = {<Login/>} />
+      </Routes>
+    </Router>
     </div>
   );
 }
