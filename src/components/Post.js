@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import DeletePost from "./DeletePost";
-import {BASE_URL} from '../axiosConfig';
+import { BASE_URL } from "../axiosConfig";
 
 function Post() {
   /*show a single post with options to edit/delete*/
@@ -18,9 +18,9 @@ function Post() {
       first_name: "",
     },
   ]);
-  
+
   const hideModal = () => {
-    setDeleteModal((deleteModal)=>false);
+    setDeleteModal((deleteModal) => false);
   };
   useEffect(() => {
     console.log({ id });
@@ -56,17 +56,13 @@ function Post() {
                 className="text-blue-800 hover:text-blue-700 focus:text-blue-700 active:text-blue-700"
                 onClick={() => setDeleteModal(true)}
               >
-                <img className= "w-6" src={require('../assets/bin.png')}/>
+                <img className="w-6" src={require("../assets/bin.png")} />
               </Link>
             </div>
           </div>
         </div>
       </div>
-      {deleteModal ? ( 
-         <DeletePost id = {post.id} hideModal={hideModal}/>
-      ) : (
-        ""
-      )}
+      {deleteModal ? <DeletePost id={post.id} hideModal={hideModal} /> : ""}
     </>
   );
 }

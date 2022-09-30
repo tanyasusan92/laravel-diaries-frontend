@@ -5,7 +5,7 @@ function DeletePost({ id, hideModal }) {
     console.log("deleting post id");
     console.log(id);
   };
-/*Delete post modal to verify with user before post is deleted completely*/
+  /*Delete post modal to verify with user before post is deleted completely*/
   return (
     <div
       className="relative z-10"

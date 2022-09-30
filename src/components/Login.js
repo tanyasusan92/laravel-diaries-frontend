@@ -1,26 +1,54 @@
-import React, {useState} from 'react';
+import React, { useState, useContext } from "react";
 import { BASE_URL } from "../axiosConfig";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
+import {UserContext} from '../App';
 
 function Login() {
   /*to complete- 
   -learn about tokens and auth, 
-  -do validations */ 
+  -do validations */
+  const navigate= useNavigate();
+  const {updateUserData} = useContext(UserContext);
+  const [loginDetails, setLoginDetails] = useState({
+    email: "",
+    password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(loginDetails);
+    console.log(loginDetails.email);
+    axios
+      .post(`${BASE_URL}auth/token`, {
+        email: loginDetails.email,
+        password: loginDetails.password,
+      })
+      .then((response) => {        
+        console.log(response);
+        let data= response.data;
+        localStorage.setItem("user_data", JSON.stringify(data));
+        updateUserData({type:"LOGIN", payload:data});
+        navigate("/");
+      })
+      .catch((error) => {
 
-    axios.get(`${BASE_URL}tokens/create`).then((response) => {
-      // Login...
-      console.log(response);
-    });
+        // remove this after api is made
+
+        let fakedata = "Fake token";
+        localStorage.setItem("user_data", JSON.stringify(fakedata));
+        updateUserData({type:"LOGIN", payload:fakedata});
+        navigate("/");
+
+        
+        console.log(error);
+        if(error.response.status === 401) {
+          setErrorMessage(error.response);
+        }
+        setErrorMessage(error.message);
+      });
   };
 
-  const [loginDetails, setLoginDetails] = useState([{
-      email: "",
-      password: "",
-    },
-  ]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginDetails({ ...loginDetails, [name]: value });
@@ -81,8 +109,9 @@ function Login() {
               hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none 
               active:bg-blue-800 active:shadow-lg w-full"
           >
-            Sign in
+            Log in
           </button>
+          {errorMessage && <div className="text-pink-800 text-center text-sm p-4">Error: {errorMessage}</div>}
           <div className="flex justify-center items-center mb-6">
             <a
               href="#!"
