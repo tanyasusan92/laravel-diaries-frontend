@@ -44,7 +44,7 @@ function Post() {
   }, [userData, userId, id]);
 
   return (
-    <>
+    <div className="bg-login-blue flex-grow-1 min-h-full min-w-full">
       <Header />
       <div className="bg-login-blue flex flex-wrap justify-center items-center py-20">
         <div className="max-w-sm lg:max-w-lg flex flex-auto m-2">
@@ -66,14 +66,18 @@ function Post() {
                 className="text-blue-800 hover:text-blue-700 focus:text-blue-700 active:text-blue-700"
                 onClick={() => setDeleteModal(true)}
               >
-                <img className="w-6" alt="Delete" src={require("../assets/bin.png")} />
+                <img
+                  className="w-6"
+                  alt="Delete"
+                  src={require("../assets/bin.png")}
+                />
               </Link>
             </div>
           </div>
         </div>
       </div>
       {deleteModal ? <DeletePost id={post.id} hideModal={hideModal} /> : ""}
-    </>
+    </div>
   );
 }
 export default Post;

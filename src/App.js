@@ -14,7 +14,7 @@ export const UserContext = React.createContext();
 
 function App() {
   const [userData, setUserData] = useState({});
-  
+
   const updateUserData = (action) => {
     switch (action.type) {
       case "LOGOUT":
@@ -31,7 +31,7 @@ function App() {
 
   const [userId, setUserId] = useState(-1);
   const updateUserId = (id) => {
-   setUserId(id);
+    setUserId(id);
   };
 
   useEffect(() => {
@@ -40,8 +40,10 @@ function App() {
   }, []);
 
   return (
-    <div className="App bg-login-blue">
-      <UserContext.Provider value={{ userData, updateUserData, userId, updateUserId}}>
+    <div className="App">
+      <UserContext.Provider
+        value={{ userData, updateUserData, userId, updateUserId }}
+      >
         <Router>
           <Routes>
             <Route
@@ -86,11 +88,7 @@ function App() {
             />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
-            <Route
-              path="/"
-              element={
-                userData? <MyPosts /> : <Login />}
-            />
+            <Route path="/" element={userData ? <MyPosts /> : <Login />} />
           </Routes>
         </Router>
       </UserContext.Provider>

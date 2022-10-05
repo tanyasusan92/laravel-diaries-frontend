@@ -63,7 +63,7 @@ function CreatePost() {
   };
 
   return (
-    <>
+    <div className="bg-login-blue flex-grow-1 min-h-full min-w-full">
       <Header />
       <div className="bg-login-blue flex flex-wrap justify-center items-center py-20">
         <div className="max-w-sm lg:max-w-lg flex flex-auto m-2">
@@ -114,7 +114,7 @@ function CreatePost() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export default CreatePost;

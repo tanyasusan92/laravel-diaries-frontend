@@ -11,9 +11,7 @@ function Header() {
   };
   return (
     <div className="flex items-center justify-between bg-soft-grey h-12">
-      <div className="flex items-center h-12">
-        
-      </div>
+      <div className="flex items-center h-12"></div>
       <div className="flex items-center justify-end h-12">
         <Link
           to={`/posts`}

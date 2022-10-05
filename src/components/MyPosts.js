@@ -88,7 +88,7 @@ function MyPosts() {
   };
 
   return (
-    <>
+    <div className="bg-login-blue flex-grow-1 min-h-full min-w-full">
       {isLoading ? (
         <div className="flex flex-wrap justify-center items-center py-20 text-white">
           <h1>Loading...</h1>
@@ -119,7 +119,7 @@ function MyPosts() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 export default MyPosts;

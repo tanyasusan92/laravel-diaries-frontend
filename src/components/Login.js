@@ -75,7 +75,7 @@ function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center flex-col md:flex-row py-20 bg-gradient-to-b from-login-blue to-white">
+    <div className="flex justify-center items-center flex-col md:flex-row w-full py-20 bg-gradient-to-b from-login-blue to-white">
       <div className="max-w-1/2 mb-12 md:mb-0">
         <img
           src={require("../assets/diary.png")}
