@@ -1,15 +1,15 @@
-import React, { useState, useContext} from "react";
-import { BASE_URL } from "../axiosConfig";
+import React, { useState, useContext } from "react";
+import { AUTH_URL } from "../axiosConfig";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import {UserContext} from '../App';
+import { useNavigate, Link } from "react-router-dom";
+import { UserContext } from "../App";
 
 function Signup() {
   /*to complete- 
   -learn about tokens and auth, 
   -do validations */
   const navigate = useNavigate();
-  const {updateUserData} = useContext(UserContext);
+  const { updateUserData, updateUserId } = useContext(UserContext);
   const [loginDetails, setLoginDetails] = useState({
     email: "",
     password: "",
@@ -19,39 +19,50 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(loginDetails.email);
+    console.log(loginDetails);
+
     axios
-      .post(`${BASE_URL}auth/register`, {
-        email: loginDetails.email,
-        password: loginDetails.password,
-        first_name: loginDetails.name,
-      })
+      .post(
+        `${AUTH_URL}auth/register`,
+        {
+          email: loginDetails.email,
+          password: loginDetails.password,
+          name: loginDetails.name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      )
       .then((response) => {
-        console.log(response);
-        let data = response.data.data;
-        let status_code = response.data.statusCode;
-        if (status_code === 6000) {
-          localStorage.setItem("user_data", JSON.stringify(data));          
-          updateUserData({type:"LOGIN", payload:data});
-          navigate("/");
+        if (response.status === 200) {
+          console.log(response.data.user);
+          let userToken = response.data.user;
+          let id = response.data.userId;
+          localStorage.setItem("user_data", JSON.stringify(userToken));
+          localStorage.setItem("user_id", JSON.stringify(id));
+          updateUserData({ type: "LOGIN", payload: userToken });
+          updateUserId(id);
+          console.log("userdata updated, navigating to /");
+          navigate("/posts");
         } else {
+          console.log("error:");
           setErrorMessage(response.data.message);
         }
       })
       .catch((error) => {
-
-                        // remove this after api is made
-
-                        let fakedata = "Fake token";
-                        localStorage.setItem("user_data", JSON.stringify(fakedata));
-                        updateUserData({type:"LOGIN", payload:fakedata});
-                        navigate("/");
-
         console.log(error);
-        if (error.response.status === 401) {
-          setErrorMessage(error.response);
+        if (error.response?.data?.message?.includes("Duplicate entry")) {
+          setErrorMessage(
+            "User with this email id already exists. Try loggin in or use different email to dign up."
+          );
+        } else if (error.response?.data?.message) {
+          setErrorMessage(error.response?.data?.message);
+        } else {
+          setErrorMessage(error.message);
         }
-        setErrorMessage(error.message);
       });
   };
 
@@ -74,7 +85,8 @@ function Signup() {
           Sign Up
         </h1>
         <form onSubmit={handleSubmit}>
-
+          {/* <!-- Equivalent to... --> */}
+          <input type="hidden" name="_token" value="{{ csrf_token() }}" />
           {/* <!-- Name input --> */}
           <div className="mb-6">
             <input
@@ -127,12 +139,12 @@ function Signup() {
             </div>
           )}
           <div className="flex justify-center items-center mb-6">
-            <a
-              href="#!"
+            <Link
+              to={"/login"}
               className="text-blue-800 hover:text-blue-700 focus:text-blue-700 active:text-blue-700"
             >
               Already an existing user? Log in.
-            </a>
+            </Link>
           </div>
         </form>
       </div>

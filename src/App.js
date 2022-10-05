@@ -2,10 +2,10 @@ import "./App.css";
 import Login from "./components/Login";
 import MyPosts from "./components/MyPosts";
 import CreatePost from "./components/CreatePost";
+// import PrivateRoutes from "./PrivateRoutes";
 import Post from "./components/Post";
 import EditPost from "./components/EditPost";
 import DeletePost from "./components/DeletePost";
-import PrivateRoutes from "./PrivateRoutes";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./components/Signup";
 import React, { useState, useEffect } from "react";
@@ -14,6 +14,7 @@ export const UserContext = React.createContext();
 
 function App() {
   const [userData, setUserData] = useState({});
+  
   const updateUserData = (action) => {
     switch (action.type) {
       case "LOGOUT":
@@ -28,21 +29,35 @@ function App() {
     }
   };
 
+  const [userId, setUserId] = useState(-1);
+  const updateUserId = (id) => {
+   setUserId(id);
+  };
+
   useEffect(() => {
-    setUserData(JSON.parse(localStorage.getItem("User_data")));
+    setUserData(JSON.parse(localStorage.getItem("user_data")));
+    setUserId(JSON.parse(localStorage.getItem("user_id")));
   }, []);
 
   return (
-    <div className="App">
-      <UserContext.Provider value={{ userData, updateUserData }}>
+    <div className="App bg-login-blue">
+      <UserContext.Provider value={{ userData, updateUserData, userId, updateUserId}}>
         <Router>
           <Routes>
             <Route
-              path="/"
+              path="/posts"
               element={
                 // <PrivateRoutes >
                 <MyPosts />
                 //  </PrivateRoutes>
+              }
+            />
+            <Route
+              path="/post/create"
+              element={
+                //<PrivateRoutes >
+                <CreatePost />
+                //</PrivateRoutes>
               }
             />
             <Route
@@ -62,14 +77,6 @@ function App() {
               }
             />
             <Route
-              path="/"
-              element={
-                //<PrivateRoutes >
-                <MyPosts />
-                //</PrivateRoutes>
-              }
-            />
-            <Route
               path="/post/:id/delete"
               element={
                 //<PrivateRoutes >
@@ -77,8 +84,13 @@ function App() {
                 //</PrivateRoutes>
               }
             />
-            <Route path="auth/login" element={<Login />} />
-            <Route path="auth/register" element={<Signup />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route
+              path="/"
+              element={
+                userData? <MyPosts /> : <Login />}
+            />
           </Routes>
         </Router>
       </UserContext.Provider>

@@ -7,7 +7,7 @@ import { UserContext } from "../App";
 
 function MyPosts() {
   /*displays the posts in db static from below array*/
-  const { userData } = useContext(UserContext);
+  const { userData, userId } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState([
     {
@@ -44,26 +44,30 @@ function MyPosts() {
     },
   ]);
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}posts`, {
-        headers: {
-          Authorization: `Bearer ${userData?.access}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setPosts(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    console.log(userId);
+    console.log(userData);
+    userData &&
+      userId !== -1 &&
+      axios
+        .get(`${BASE_URL}${userId}/posts`, {
+          headers: {
+            Authorization: `Bearer ${userData}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data);
+          setPosts(response.data.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }, [userData, userId]);
 
   let renderPosts = () => {
     return posts.map((post) => (
       <div key={post.id} className="max-w-sm lg:max-w-lg flex flex-auto m-2">
-        <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded p-4 flex flex-col justify-between">
+        <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-soft-grey rounded p-4 flex flex-col justify-between">
           <div className="mb-8">
             <div className="text-gray-500 font-bold text-xl mb-2">
               {post.title}
@@ -85,24 +89,33 @@ function MyPosts() {
 
   return (
     <>
-      <Header />
       {isLoading ? (
-        <h1>Loading</h1>
+        <div className="flex flex-wrap justify-center items-center py-20 text-white">
+          <h1>Loading...</h1>
+        </div>
       ) : (
         <>
-          <div className="bg-login-blue flex flex-wrap justify-center items-center py-20">
-            {renderPosts()}
+          <Header />
+          <div className="bg-login-blue flex flex-wrap justify-center items-center pt-20 pb-10">
+            {posts.length ? (
+              renderPosts()
+            ) : (
+              <div className="flex flex-wrap justify-center items-center text-white py-20">
+                <h1>No posts here...</h1>
+              </div>
+            )}
           </div>
-          <div className="flex flex-wrap justify-center items-center py-20">
-            <button
-              type="submit"
-              className="m-2 inline-block px-7 py-3 bg-sign-up text-white 
-              font-medium text-sm rounded-full shadow-md hover:bg-login-blue 
+          <div className="flex items-center justify-center h-12 pb-10">
+            <Link to={`/post/create`}>
+              <button
+                className="m-2 inline-block px-5 py-2 bg-button-red text-whitesmoke 
+              rounded-full shadow-md hover:bg-login-blue 
               hover:shadow-lg focus:bg-login-blue focus:shadow-lg focus:outline-none 
-              active:bg-login-blue active:shadow-lg w-52"
-            >
-              Create new entry
-            </button>
+              active:bg-login-blue active:shadow-lg w-40"
+              >
+                Create new entry
+              </button>
+            </Link>
           </div>
         </>
       )}

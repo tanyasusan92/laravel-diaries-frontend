@@ -10,7 +10,7 @@ function PrivateRoutes({ children }) {
     <Navigate
       replace
       to={{
-        pathname: "auth/login",
+        pathname: "login",
         search: `?next=${location.pathname}`,
       }}
     />

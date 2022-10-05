@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../App";
+import { BASE_URL } from "../axiosConfig";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function DeletePost({ id, hideModal }) {
+  const { userId, userData } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const deletePost = () => {
     console.log("deleting post id");
     console.log(id);
+
+    userData &&
+      userId !== -1 &&
+      axios
+        .delete(`${BASE_URL}${userId}/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${userData}`,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+          console.log("deleted if 1 is above");
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
   /*Delete post modal to verify with user before post is deleted completely*/
   return (

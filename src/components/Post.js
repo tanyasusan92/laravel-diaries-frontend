@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../App";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import DeletePost from "./DeletePost";
 import { BASE_URL } from "../axiosConfig";
+import Header from "./Header";
 
 function Post() {
   /*show a single post with options to edit/delete*/
   let { id } = useParams();
+  const { userId, userData } = useContext(UserContext);
   const [deleteModal, setDeleteModal] = useState(false);
   const [post, setPost] = useState([
     {
@@ -23,19 +26,26 @@ function Post() {
     setDeleteModal((deleteModal) => false);
   };
   useEffect(() => {
-    console.log({ id });
-    axios
-      .get(`${BASE_URL}posts/${id}`)
-      .then((response) => {
-        setPost(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    console.log(id);
+    userData &&
+      userId !== -1 &&
+      axios
+        .get(`${BASE_URL}${userId}/posts/${id}`, {
+          headers: {
+            Authorization: `Bearer ${userData}`,
+          },
+        })
+        .then((response) => {
+          setPost(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }, [userData, userId, id]);
 
   return (
     <>
+      <Header />
       <div className="bg-login-blue flex flex-wrap justify-center items-center py-20">
         <div className="max-w-sm lg:max-w-lg flex flex-auto m-2">
           <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded p-4 flex flex-col justify-between">
@@ -56,7 +66,7 @@ function Post() {
                 className="text-blue-800 hover:text-blue-700 focus:text-blue-700 active:text-blue-700"
                 onClick={() => setDeleteModal(true)}
               >
-                <img className="w-6" src={require("../assets/bin.png")} />
+                <img className="w-6" alt="Delete" src={require("../assets/bin.png")} />
               </Link>
             </div>
           </div>
