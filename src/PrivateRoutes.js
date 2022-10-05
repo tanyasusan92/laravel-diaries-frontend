@@ -1,16 +1,16 @@
 import React from "react";
-import { Navigate, Route, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 function PrivateRoutes({ children }) {
-  const user_data = JSON.parse(localStorage.getItem("user_data"));
+  const userData = JSON.parse(localStorage.getItem("user_data"));
   const location = useLocation();
-  return user_data?.access ? (
+  return userData ? (
     children
   ) : (
     <Navigate
       replace
       to={{
-        pathname: "login",
+        pathname: "/login",
         search: `?next=${location.pathname}`,
       }}
     />

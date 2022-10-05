@@ -2,7 +2,7 @@ import "./App.css";
 import Login from "./components/Login";
 import MyPosts from "./components/MyPosts";
 import CreatePost from "./components/CreatePost";
-// import PrivateRoutes from "./PrivateRoutes";
+import PrivateRoutes from "./PrivateRoutes";
 import Post from "./components/Post";
 import EditPost from "./components/EditPost";
 import DeletePost from "./components/DeletePost";
@@ -49,41 +49,41 @@ function App() {
             <Route
               path="/posts"
               element={
-                // <PrivateRoutes >
-                <MyPosts />
-                //  </PrivateRoutes>
+                <PrivateRoutes>
+                  <MyPosts />
+                </PrivateRoutes>
               }
             />
             <Route
               path="/post/create"
               element={
-                //<PrivateRoutes >
-                <CreatePost />
-                //</PrivateRoutes>
+                <PrivateRoutes>
+                  <CreatePost />
+                </PrivateRoutes>
               }
             />
             <Route
               path="/post/:id"
               element={
-                //<PrivateRoutes >
-                <Post />
-                //</PrivateRoutes>
+                <PrivateRoutes>
+                  <Post />
+                </PrivateRoutes>
               }
             />
             <Route
               path="/post/:id/edit"
               element={
-                //<PrivateRoutes >
-                <EditPost />
-                //</PrivateRoutes>
+                <PrivateRoutes>
+                  <EditPost />
+                </PrivateRoutes>
               }
             />
             <Route
               path="/post/:id/delete"
               element={
-                //<PrivateRoutes >
-                <DeletePost />
-                //</PrivateRoutes>
+                <PrivateRoutes>
+                  <DeletePost />
+                </PrivateRoutes>
               }
             />
             <Route path="login" element={<Login />} />
