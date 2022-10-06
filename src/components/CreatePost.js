@@ -27,9 +27,9 @@ function CreatePost() {
     setErrorMessage("");
     e.preventDefault();
 
-    if (post.title.length === 0) {
+    if (post.title === undefined || post.title.length === 0) {
       setErrorMessage("Title cannot be left empty");
-    } else if (post.content.length === 0) {
+    } else if (post.content === undefined || post.content.length === 0) {
       setErrorMessage("Content cannot be left empty");
     } else {
       console.log("submitting this");
